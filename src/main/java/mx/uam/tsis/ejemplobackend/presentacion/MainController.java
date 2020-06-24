@@ -11,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * Controlador web
  * 
- * @author humbertocervantes
+ * @author Maribel Vidal
  *
  */
 @Controller

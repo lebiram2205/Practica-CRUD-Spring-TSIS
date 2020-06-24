@@ -1,25 +1,153 @@
-<html xmlns:th="http://www.thymeleaf.org">
-	<head>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
-	</script>
+<html>
+<head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<style>
+body {
+	background-color: #eee;
+}
+
+.contenido {
+	background-color: white;
+	display: block;
+	padding: 14px 14px;
+	box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2)
+}
+
+input[type=text] {
+	width: 100%;
+	padding: 14px 14px;
+	margin: 8px 0;
+	display: iline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+button {
+	background-color: #4CAF50;
+	color: white;
+	font-size:20px;
+	width: 120 px;
+	padding: 14px 14px;
+	margin: 8px 0;
+	border-radius: 4px;
+	border: none;
+	cursor: pointer;
+}
+button:hover {
+    transform: scale(1.05,1.05);
+}
+
+</style>
+
+</head>
+<body>
 	
-	</head>
-	<body>
-		Registro de alumnos
-		<br>
-		Nombre:
-		<br>
-		<input type="text" value="${nombre}" th:text="${nombre}">
-		<br>
-		Matricula:
-		<br>
-		<input type="text" value='${nombre}' th:text="${nombre}">
-		<button>Boton</button>
-		</body>
 	
-		
-		<script>
 	
+	<div class="contenido">
+	<h2>Alumnos</h2>
+		<form>
+			<label>Matricula</label>
+			<input type="text" name="matricula" id="matricula" placeholder="Escribe la matricula" /> 
+			<label>Nombre</label>
+			<input type="text" name="nombre" id="nombre" placeholder="Escribe tu nombre" /> 
+			<label>Carrera</label> 
+			<input type="text" name="carrera" id="carrera" placeholder="Escribe la carrera" />
+				
 			
-		</script>	
+			<button id="post" type="submit">Guardar</button>
+			<button id="get" type="button">Obtener</button>
+			<button id="put" type="submit">Actualizar</button>
+			<button id="delete" type="submit">Eliminar</button>
+		</form>
+	<div id="postResultDiv"></div>
+	</div>
+</body>
+
+
+<script>
+
+		$(document).ready(function(){
+		//funcion post
+		  $("#post").click(function(){
+
+					var informacion={
+							
+				    	"matricula": $('#matricula').val(),
+				        "nombre":  $('#nombre').val(),
+				        "carrera":  $('#carrera').val()
+				    }
+					$.ajax({
+						type : "POST",
+						contentType : "application/json",
+						url : "/alumnos",
+						data : JSON.stringify(informacion),
+						dataType : 'json',
+						success: function(data, status){
+						    console.log("Data: " + data + "\nStatus: " + status);
+						  }
+						
+					});
+			
+			
+		  });//fin post
+		
+		  
+		//funcion get
+		  $("#get").click(function(){
+				var matricula = $('#matricula').val();
+				var resultadodata;
+				  $.get("alumnos/"+matricula, function(data, status){
+					  $('#nombre').attr('placeholder','Some New Text').val(data.nombre);
+					  $('#carrera').attr('placeholder','Some New Text').val(data.carrera);
+				      alert("Se obtiene el dato de nombre: " + data.nombre + "\nStatus: " + status);
+				    
+
+				    });
+				
+		  });//fin get
+		//funcion put
+		  $("#put").click(function(){
+			  var matricula = $('#matricula').val();
+			  
+				var informacion={
+						
+			    	"matricula": $('#matricula').val(),
+			        "nombre":  $('#nombre').val(),
+			        "carrera":  $('#carrera').val()
+			    }
+				$.ajax({
+					type : "PUT",
+					contentType : "application/json",
+					url : "alumnos/"+matricula,
+					data : JSON.stringify(informacion),
+					dataType : 'json',
+					success : function(result) {
+						console.log("data: "+  result);
+					}
+					
+				});
+			  });//fin put
+		//funcion delete
+		  $("#delete").click(function(){
+			  var matricula = $('#matricula').val();
+			  var urldir="http://localhost:8080/alumnos/"+matricula ;
+			  alert("Se eliminara el registro: "+urldir);
+				$.ajax({
+					type : "DELETE",
+					url : urldir,
+					success : function(result) {
+						console.log("data: "+  result);
+					}
+					
+				});
+			  
+			  });//fin delete
+		  
+		  
+		});//termina jquery
+		</script>
+
 </html>
