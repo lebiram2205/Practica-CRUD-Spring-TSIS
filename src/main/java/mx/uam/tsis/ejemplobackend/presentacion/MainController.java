@@ -19,11 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 public class MainController {
 	//comentario
 	@GetMapping("/")
-	public String index(Model model) {
+	public String index() {
 		
 		log.info("Se invocó el método index()");
-		model.addAttribute("nombre", "Juan");
-		
 		
 		return "index";
 	}

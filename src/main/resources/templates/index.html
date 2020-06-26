@@ -72,7 +72,7 @@ button:hover {
 		$(document).ready(function(){
 		//funcion post
 		  $("#post").click(function(){
-
+					
 					var informacion={
 							
 				    	"matricula": $('#matricula').val(),
@@ -97,6 +97,9 @@ button:hover {
 		  
 		//funcion get
 		  $("#get").click(function(){
+			  	if($('#matricula').val()==""){
+			  		alert("Escribir el campo matricula ");
+			  	}
 				var matricula = $('#matricula').val();
 				var resultadodata;
 				  $.get("alumnos/"+matricula, function(data, status){
