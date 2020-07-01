@@ -1,6 +1,7 @@
 package mx.uam.tsis.ejemplobackend.negocio;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,9 @@ public class AlumnoService {
 	public Alumno create(Alumno nuevoAlumno) {
 		// regla de negocio no se puede crear mas de un alumno con las misma matricula
 		log.info("entre a alumno service" + nuevoAlumno);
-		Alumno alumno = alumnoRepository.findByMatricula(nuevoAlumno.getMatricula());
-		if (alumno == null) {
+		Optional<Alumno> alumno = alumnoRepository.findById(nuevoAlumno.getMatricula());
+		// si no esta presente el alumno
+		if (!alumno.isPresent()) {
 			return alumnoRepository.save(nuevoAlumno);
 		} else {
 			return null;
@@ -38,8 +40,8 @@ public class AlumnoService {
 	 * 
 	 * @return
 	 */
-	public List<Alumno> retrieveAll() {
-		return alumnoRepository.find();
+	public Iterable<Alumno> retrieveAll() {
+		return alumnoRepository.findAll();
 	}
 
 	/**
@@ -48,8 +50,9 @@ public class AlumnoService {
 	 * @param matricula
 	 * @return
 	 */
-	public Alumno retrieve(Integer matricula) {
-		return alumnoRepository.findByMatricula(matricula);
+	public Optional<Alumno> retrieve(Integer matricula) {
+		return alumnoRepository.findById(matricula);
+
 	}
 
 	/**
@@ -60,9 +63,9 @@ public class AlumnoService {
 	 * @return
 	 */
 	public Alumno udate(Integer matricula, Alumno alumnoActualizar) {
-		Alumno alumno = alumnoRepository.findByMatricula(alumnoActualizar.getMatricula());
-		if (alumno != null) {
-			return alumnoRepository.put(matricula, alumnoActualizar);
+		Optional<Alumno> alumno = alumnoRepository.findById(matricula);
+		if (!alumno.isPresent()) {
+			return alumnoRepository.save(alumnoActualizar);
 		} else {
 			return null;
 		}
@@ -74,9 +77,13 @@ public class AlumnoService {
 	 * @param matricula
 	 * @return
 	 */
-	public Alumno delete(Integer matricula) {
-		log.info("Buscando al alumno con matricula para eliminarlo desde service" + matricula);
-		return alumnoRepository.deleteByMatricula(matricula);
+//	public Alumno delete(Integer matricula) {
+//		log.info("Buscando al alumno con matricula para eliminarlo desde service" + matricula);
+//		return alumnoRepository.deleteById(matricula);
+//	}
+	public boolean delete(Integer matricula) {
+		alumnoRepository.deleteById(matricula);
+		Optional<Alumno> alumno = alumnoRepository.findById(matricula);
+		return alumno.isPresent();
 	}
-
 }// fin de AlumnoService
