@@ -16,7 +16,7 @@ import mx.uam.tsis.ejemplobackend.servicios.AlumnoController;
 public class AlumnoService {
 	@Autowired
 	private AlumnoRepository alumnoRepository;
-
+	
 	/**
 	 * Crea un nuevo alumno
 	 * 
@@ -25,11 +25,15 @@ public class AlumnoService {
 	 */
 	public Alumno create(Alumno nuevoAlumno) {
 		// regla de negocio no se puede crear mas de un alumno con las misma matricula
-		log.info("entre a alumno service" + nuevoAlumno);
+		//log.info("entre a alumno service" + nuevoAlumno);
 		Optional<Alumno> alumno = alumnoRepository.findById(nuevoAlumno.getMatricula());
 		// si no esta presente el alumno
 		if (!alumno.isPresent()) {
-			return alumnoRepository.save(nuevoAlumno);
+			log.info("entre a alumno service" + nuevoAlumno);
+			Alumno alumnoP=alumnoRepository.save(nuevoAlumno);
+			log.info("entre y voy a regresar a " + alumnoP);
+			return alumnoP;
+			
 		} else {
 			return null;
 		}
@@ -50,8 +54,9 @@ public class AlumnoService {
 	 * @param matricula
 	 * @return
 	 */
-	public Optional<Alumno> retrieve(Integer matricula) {
-		return alumnoRepository.findById(matricula);
+	public Alumno retrieve(Integer matricula) {
+		Optional <Alumno> alumnoOp= alumnoRepository.findById(matricula);
+		return alumnoOp.get();
 
 	}
 

@@ -71,7 +71,7 @@ public class AlumnoController {
 	@GetMapping(path = "/alumnos/{matricula}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> retrieve(@PathVariable("matricula") @Valid Integer matricula) {
 
-		Optional<Alumno> alumno = alumnoService.retrieve(matricula);
+		Alumno alumno = alumnoService.retrieve(matricula);
 		if (alumno != null) {
 			return ResponseEntity.status(HttpStatus.OK).body(alumno);
 		} else {
@@ -93,7 +93,7 @@ public class AlumnoController {
 	@DeleteMapping(path = "/alumnos/{matricula}")
 	public ResponseEntity<?> delete(@PathVariable("matricula") @Valid Integer matricula) {
 		log.info("Buscando al alumno con matricula para eliminarlo" + matricula);
-		Optional<Alumno> alumno = alumnoService.retrieve(matricula);
+		Alumno alumno = alumnoService.retrieve(matricula);
 		if (alumno != null) {
 			alumnoService.delete(matricula);
 			return ResponseEntity.status(HttpStatus.OK).body(matricula);
