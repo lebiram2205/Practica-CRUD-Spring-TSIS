@@ -25,46 +25,62 @@ import mx.uam.tsis.ejemplobackend.negocio.modelo.Grupo;
 @Slf4j
 
 public class GrupoController {
-	
-@Autowired
-private GrupoService gruposervice;
-@ApiOperation(
-		value="Crea un grupo",
-		notes="Permite crear un nuevo grupo"
-		)//documentacion del api
-@PostMapping(path="/grupos", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-public ResponseEntity<?> create(@RequestBody @Valid Grupo nuevoGrupo){
-	Grupo grupo= gruposervice.create(nuevoGrupo);
-	if(grupo !=null) {
-		 return ResponseEntity.status(HttpStatus.CREATED).body(nuevoGrupo);
-	}
-	else {
-		 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo crear el alumno");
-	}
-	
-}
 
-@GetMapping(path="/grupos", produces = MediaType.APPLICATION_JSON_VALUE) 
-public ResponseEntity<?> retrieveAll(){
-	Iterable<Grupo> result = gruposervice.retriveAll();
-	return ResponseEntity.status(HttpStatus.OK).body(result);
-	
-}
-/**
- * Post grupos/{id}/alumno?matricula=1234
- * @param Id
- * @return
- */
-@PostMapping(path="/grupos/{id}/alumnos",produces = MediaType.APPLICATION_JSON_VALUE)
-public ResponseEntity<?> addStudentToGroup(@PathVariable("id") Integer id, 
-										   @RequestParam("matricula")Integer matricula){
-	boolean result= gruposervice.addStudentToGrup(id, matricula);
-	if(result) {
-		return ResponseEntity.status(HttpStatus.OK).build();
-	}else {
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	@Autowired
+	private GrupoService gruposervice;
+
+	/**
+	 * Insertar un grupo
+	 * 
+	 * @param nuevoGrupo
+	 * @return estatus
+	 */
+	@ApiOperation(value = "Crea un grupo", notes = "Permite crear un nuevo grupo") // documentacion del api
+	@PostMapping(path = "/grupos", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> create(@RequestBody @Valid Grupo nuevoGrupo) {
+		Grupo grupo = gruposervice.create(nuevoGrupo);
+		if (grupo != null) {
+			return ResponseEntity.status(HttpStatus.CREATED).body(nuevoGrupo);
+		} else {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("no se pudo crear el alumno");
+		}
+
 	}
-	
-}
+
+	/**
+	 * Obtener los Grupos disponibles
+	 * 
+	 * @return el estatus
+	 */
+	@ApiOperation(value = "Obtener grupos", notes = "Obtener los grupos disponibles") // documentacion del api
+	@GetMapping(path = "/grupos", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> retrieveAll() {
+		Iterable<Grupo> result = gruposervice.retriveAll();
+		return ResponseEntity.status(HttpStatus.OK).body(result);
+
+	}
+
+	/**
+	 * Añadir estudiantes a los correspondientes grupos Post
+	 * grupos/{id}/alumno?matricula=1234
+	 * 
+	 * @param Id
+	 * @return
+	 */
+	@ApiOperation(value = "Alumnos inscritos a los grupos", notes = "Alumnos inscritos a los grupos disponibles") // documentacion
+																													// del
+																													// api
+	@PostMapping(path = "/grupos/{id}/alumnos", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> addStudentToGroup(@PathVariable("id") Integer id,
+			@RequestParam("matricula") Integer matricula) {
+		boolean result = gruposervice.addStudentToGrup(id, matricula);
+		log.info("El resultado desde Grupo Controller fue " + result);
+		if (result) {
+			return ResponseEntity.status(HttpStatus.OK).build();
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+
+	}
 
 }

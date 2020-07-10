@@ -24,7 +24,8 @@ public class GrupoServiceTest {
 	private AlumnoService alumnoserviceMock;
 	@InjectMocks
 	private GrupoService gruposerviceMock;
-
+	
+	//Prueba unitaria para agregar un estudiante a un grupo
 	@Test
 	public void testSuccesfulAddStudentToGroup() {
 		Grupo grupo=new Grupo();
@@ -48,7 +49,7 @@ public class GrupoServiceTest {
 		 //assertEquals(grupo.getAlumnos().get(0),alumno);
 		
 	}
-	//Un grupo que no exista
+	//
 	@Test
 	public void testUnSuccesfulAddStudentToGroup() {
 	
@@ -69,7 +70,7 @@ public class GrupoServiceTest {
 		 
 		
 	}
-	
+	//prueba unitaria para eliminar un grupo
 	@Test
 	public void testSuccesfulDeletGroup() {
 	
@@ -88,7 +89,7 @@ public class GrupoServiceTest {
 		
 	}
 	
-	
+	//prueba unitaria para actualizar un grupo
 	@Test
 	public void testSuccesfulUpdateGroup() {
 	
